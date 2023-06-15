@@ -17,20 +17,26 @@ module.exports = function (RED) {
             let options = RED.util.getMessageProperty(msg, config.options);
             let outputProperty = config.outputProperty;
             let outputType = config.outputType;
-            
-            const pdfDocGenerator = pdfMake.createPdf(docDefinition, options);
-            if (outputType == "base64") {
-                pdfDocGenerator.getBase64((base64) => {
-                    RED.util.setMessageProperty(msg, outputProperty, base64);
-                    this.send(msg);
-                });
-            } else if (outputType == "Buffer") {
-                pdfDocGenerator.getBuffer((buffer) => {
-                    RED.util.setMessageProperty(msg, outputProperty, Buffer.from(buffer));
-                    this.send(msg);
-                });
-            } else {
-                throw "unknown output type. This should never happen"
+
+            try {
+                
+                const pdfDocGenerator = pdfMake.createPdf(docDefinition, options);
+                if (outputType == "base64") {
+                    pdfDocGenerator.getBase64((base64) => {
+                        RED.util.setMessageProperty(msg, outputProperty, base64);
+                        this.send(msg);
+                    });
+                } else if (outputType == "Buffer") {
+                    pdfDocGenerator.getBuffer((buffer) => {
+                        RED.util.setMessageProperty(msg, outputProperty, Buffer.from(buffer));
+                        this.send(msg);
+                    });
+                } else {
+                    done("unknown output type. This should never happen");
+                }
+
+            } catch (err) {
+                 done(err);   
             }
 
         });
