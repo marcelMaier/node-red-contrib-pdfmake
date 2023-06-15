@@ -1,3 +1,5 @@
+Fork of the original package with better error handling
+
 # node-red-contrib-pdfmake
 This node is a simple wrapper around pdfmake, a JSON based solution to create PDFs from a given document definition.
 
